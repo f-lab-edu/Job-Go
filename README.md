@@ -1,1 +1,1 @@
-# f-lab-springboot-jpa-project-template
+# Job-Go
