@@ -33,5 +33,5 @@ build/
 .vscode/
 
 
-### application properties ###
-**/application-local.properties
+### application yml ###
+**/application-secret.yml
