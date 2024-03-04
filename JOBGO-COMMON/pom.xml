@@ -39,8 +39,8 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -64,6 +64,10 @@
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,6 +83,14 @@
 						</exclude>
 					</excludes>
 				</configuration>
+				<executions>
+	            	<execution>
+	                	<id>repackage</id>
+	                    <configuration>
+	                    	<classifier>exec</classifier>
+	                    </configuration>
+	                </execution>
+	            </executions>
 			</plugin>
 		</plugins>
 	</build>
