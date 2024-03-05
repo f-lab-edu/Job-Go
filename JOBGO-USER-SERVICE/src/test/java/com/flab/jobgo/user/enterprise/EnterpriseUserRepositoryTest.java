@@ -10,7 +10,7 @@ import com.flab.jobgo.common.entity.EnterpriseUser;
 import com.flab.jobgo.user.dto.EnterpriseUserReqDTO;
 
 @SpringBootTest
-public class EnterpriseUserTest {
+public class EnterpriseUserRepositoryTest {
 
 	@Autowired
 	private EnterPriseUserRepository repo;

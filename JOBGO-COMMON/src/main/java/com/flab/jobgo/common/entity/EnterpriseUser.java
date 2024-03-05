@@ -31,7 +31,7 @@ public class EnterpriseUser {
     private String email;
 
     // 비밀번호
-    @Column(name = "PW" ,nullable = false ,length = 32)
+    @Column(name = "PW" ,nullable = false ,length = 100)
     private String pw;
     
     // 기업정보

@@ -32,7 +32,7 @@ public class GeneralUser{
     private String email;
 
     // 비밀번호
-    @Column(name = "PW" ,nullable = false ,length = 32)
+    @Column(name = "PW" ,nullable = false ,length = 100)
     private String pw;
     
 	// 회원연락처
