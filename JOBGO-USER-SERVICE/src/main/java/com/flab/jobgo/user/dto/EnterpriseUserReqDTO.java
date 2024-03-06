@@ -51,7 +51,7 @@ public class EnterpriseUserReqDTO{
 		 */
 		EnterpriseUser enterpriseUser = EnterpriseUser.builder()
 				.userId(userId)
-				.pw(PasswordEncoder.encoding(pw))
+				.pw(PasswordEncoder.encode(pw))
 				.email(email)
 				.build();
 		

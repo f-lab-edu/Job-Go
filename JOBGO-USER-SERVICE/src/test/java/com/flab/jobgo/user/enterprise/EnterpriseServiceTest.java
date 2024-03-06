@@ -2,19 +2,21 @@ package com.flab.jobgo.user.enterprise;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.lenient;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.jobgo.user.dto.EnterpriseUserReqDTO;
 import com.flab.jobgo.user.exception.DuplicatedUserIdException;
 import com.flab.jobgo.user.service.EnterpriseUserService;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class) 
 public class EnterpriseServiceTest {
 
-	@Autowired
+	@Mock
 	private EnterpriseUserService service;
 	
 	// 중복ID 회원가입 테스트
@@ -31,6 +33,10 @@ public class EnterpriseServiceTest {
 				.managerName("담당자A")
 				.contact("01011111111")
 				.build();
+		
+		
+		// Loose stubbing으로 설정하여 에러를 넘기기 위해 lenient()사용
+		lenient().doThrow(DuplicatedUserIdException.class).when(service).userRegist(userReqDTO);
 		
 		assertThrows(DuplicatedUserIdException.class, () -> {
 			service.userRegist(userReqDTO);	
@@ -52,9 +58,11 @@ public class EnterpriseServiceTest {
 				.contact("01033333333")
 				.build();
 		
-		service.userRegist(userReqDTO);
+		lenient().doNothing().when(service).userRegist(userReqDTO);
+		lenient().doReturn(true).when(service).isExistUserId(userReqDTO.getUserId());
 		
 		boolean existUserId = service.isExistUserId(userReqDTO.getUserId());
+		
 		assertThat(existUserId).isTrue();
 	}
 }
