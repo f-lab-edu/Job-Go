@@ -3,6 +3,7 @@ package com.flab.jobgo.common.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -19,9 +20,13 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //Entity는 기본생성자가 필수이다. 하지만 무의미한 Entity객체 생성을 막기위해 접근제어자는 protected로 열어놓자
 public class GeneralUser{
-	// 일반회원ID
 	@Id
-    @Column(name = "USER_ID", length = 32)
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // MySQL의 IDENTITY전략은   Auto Increment로 적용 
+	@Column(name = "GENERAL_USER_ID")
+	private Long id;
+	
+	// 일반회원ID
+    @Column(name = "USER_ID", length = 32, unique = true) // 식별자로서  uniqe필드로 지정
     private String userId;
 	
 	@Column(name = "USER_NAME", nullable = false, length = 32)
@@ -32,7 +37,7 @@ public class GeneralUser{
     private String email;
 
     // 비밀번호
-    @Column(name = "PW" ,nullable = false ,length = 32)
+    @Column(name = "PW" ,nullable = false ,length = 100)
     private String pw;
     
 	// 회원연락처
