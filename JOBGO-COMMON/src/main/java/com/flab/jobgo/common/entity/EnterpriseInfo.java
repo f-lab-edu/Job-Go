@@ -1,5 +1,8 @@
 package com.flab.jobgo.common.entity;
 
+import com.flab.jobgo.common.constant.CommonConstant;
+import com.flab.jobgo.common.dto.EnterpriseInfoResponseDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -77,7 +80,7 @@ public class EnterpriseInfo {
     private String updateDate;
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ENTERPRISE_USER_ID")
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", unique = true) // 외래키를 PK가 아닌 user_id로 설정
     private EnterpriseUser enterpriseUser;
 
     @Builder
@@ -100,6 +103,24 @@ public class EnterpriseInfo {
 		this.updateDate = updateDate;
 		this.enterpriseUser = enterpriseUser;
 	}
+    
+    public EnterpriseInfoResponseDTO transferToEnterpriseInfoResponseDTO() {
+    	return EnterpriseInfoResponseDTO.builder()
+		    	.enterpriseName(enterpriseName)
+		    	.companyNumber(companyNumber)
+		    	.managerName(managerName)
+		    	.contact(contact)
+		    	.address(address)
+		    	.fsIndustry(CommonConstant.FirstIndustryEnum.getValue(fsIndustryCode))
+		    	.fsIndustryCode(fsIndustryCode)
+		    	.scIndustry(CommonConstant.SecondIndustryEnum.getValue(scIndustryCode))
+		    	.scIndustryCode(scIndustryCode)
+		    	.establishDate(establishDate)
+		    	.employees(employees)
+		    	.enterpriseType(CommonConstant.EnterpriseTypeEnum.getValue(enterpriseTypeCode))
+		    	.enterpriseTypeCode(enterpriseTypeCode)
+		    	.build();
+    }
 }
 
 

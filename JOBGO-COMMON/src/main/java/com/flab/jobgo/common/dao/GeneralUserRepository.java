@@ -14,4 +14,6 @@ public interface GeneralUserRepository extends JpaRepository<GeneralUser, String
 
 	//일반회원 로그인시 검증
 	GeneralUser findByUserIdAndPw(String userId, String pw);
+	
+	boolean existsByUserId(String userId);
 }

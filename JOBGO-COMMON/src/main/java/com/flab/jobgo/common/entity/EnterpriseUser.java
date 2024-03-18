@@ -42,7 +42,6 @@ public class EnterpriseUser {
     // 기업정보
     // 기업회원 등록,탈퇴시 기업정보도 함께 저장,삭제되기 위해 양방향 매핑하여 영속성 전이
     @OneToOne(mappedBy = "enterpriseUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL) 
-    @JoinColumn(name = "ENTERPRISE_USER_ID")
     private EnterpriseInfo enterpriseInfo;
 
     @Builder //의도가 명확하지 않은 변경을 막기위해 Setter를 사용하지 않았다. 그래서 의미있는 객체를 생성하기 위해 Builder를 사용

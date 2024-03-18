@@ -14,4 +14,6 @@ public interface EnterPriseUserRepository extends JpaRepository<EnterpriseUser, 
 
 	//기업회원 로그인시 검증
 	EnterpriseUser findByUserIdAndPw(String userId, String pw);
+	
+	boolean existsByUserId(String userId);
 }
