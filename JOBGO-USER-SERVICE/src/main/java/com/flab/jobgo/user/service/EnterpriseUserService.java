@@ -29,7 +29,7 @@ public class EnterpriseUserService{
 	}
 
 	public boolean isExistUserId(String userId) {
-		return userRepository.existsById(userId);
+		return userRepository.existsByUserId(userId);
 	}
 
 }
