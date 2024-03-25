@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnterpriseInfoResponseDTO {
 	
+	// 기업Id
+	private Integer enterpriseId;
+	
 	// 기업명
 	private String enterpriseName;
 	
@@ -52,11 +55,12 @@ public class EnterpriseInfoResponseDTO {
 	private Integer averageSalary;
 	
 	@Builder
-	public EnterpriseInfoResponseDTO(String enterpriseName, String companyNumber, String managerName, String contact,
+	public EnterpriseInfoResponseDTO(Integer enterpriseId, String enterpriseName, String companyNumber, String managerName, String contact,
 			String fsIndustryCode, String fsIndustry, String scIndustryCode, String scIndustry, String address,
 			String establishDate, String enterpriseTypeCode, String enterpriseType, Integer employees,
 			Integer averageSalary) {
 		super();
+		this.enterpriseId = enterpriseId;
 		this.enterpriseName = enterpriseName;
 		this.companyNumber = companyNumber;
 		this.managerName = managerName;

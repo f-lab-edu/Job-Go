@@ -16,12 +16,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** 기업정보 | TB_ENTERPRISE_INFO */
 
 @Entity
 @Table(name = "TB_ENTERPRISE_INFO")
 @Getter
+@Setter // 변경감지 update를 위해 setter사용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnterpriseInfo {
 
@@ -106,6 +108,7 @@ public class EnterpriseInfo {
     
     public EnterpriseInfoResponseDTO transferToEnterpriseInfoResponseDTO() {
     	return EnterpriseInfoResponseDTO.builder()
+    			.enterpriseId(enterpriseId)
 		    	.enterpriseName(enterpriseName)
 		    	.companyNumber(companyNumber)
 		    	.managerName(managerName)
