@@ -18,6 +18,7 @@ import com.flab.jobgo.common.utils.ResponseGenerateUtil;
 import com.flab.jobgo.enterprise.dto.EnterpriseInfoRequestDTO;
 import com.flab.jobgo.enterprise.service.EnterpriseInfoService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -36,7 +37,7 @@ public class EnterpriseInfoController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<ResponseDTO> updateEnterpriseInfo(@RequestBody EnterpriseInfoRequestDTO enterpriseInfoReqDTO, Errors errors){
+	public ResponseEntity<ResponseDTO> updateEnterpriseInfo(@RequestBody @Valid EnterpriseInfoRequestDTO enterpriseInfoReqDTO, Errors errors){
 		if(errors.hasErrors()) {
 			FieldError fieldError = errors.getFieldError();
 			return ResponseGenerateUtil.generateResponse(fieldError.getDefaultMessage(), HttpStatus.BAD_REQUEST);

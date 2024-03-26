@@ -36,7 +36,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(FirstIndustryEnum industry : FirstIndustryEnum.values()) {
-				if(industry.code == code) {
+				if(industry.code.equals(code)) {
 					return industry.value;
 				}
 			}
@@ -101,7 +101,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(SecondIndustryEnum industry : SecondIndustryEnum.values()) {
-				if(industry.code == code) {
+				if(industry.code.equals(code)) {
 					return industry.value;
 				}
 			}
@@ -128,7 +128,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(EnterpriseTypeEnum type : EnterpriseTypeEnum.values()) {
-				if(type.code == code) {
+				if(type.code.equals(code)) {
 					return type.value;
 				}
 			}
