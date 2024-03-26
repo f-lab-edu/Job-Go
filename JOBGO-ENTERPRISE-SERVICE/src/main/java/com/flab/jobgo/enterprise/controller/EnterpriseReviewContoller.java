@@ -1,9 +1,12 @@
 package com.flab.jobgo.enterprise.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +17,7 @@ import com.flab.jobgo.common.constant.CommonConstant;
 import com.flab.jobgo.common.dto.ResponseDTO;
 import com.flab.jobgo.common.utils.ResponseGenerateUtil;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewRequestDTO;
+import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
 import com.flab.jobgo.enterprise.service.EnterpriseReviewService;
 
 import jakarta.validation.Valid;
@@ -38,6 +42,13 @@ public class EnterpriseReviewContoller {
 		service.enterpriseReviewRegist(enterpriseReviewRequestDTO, enterpriseId);
 	
 		return ResponseGenerateUtil.generateResponse(CommonConstant.REVIEW_REGIST_SUCCESS, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{enterprise-id}")
+	public ResponseEntity<List<EnterpriseReviewResponseDTO>> selectEnterpriseReview(@PathVariable("enterprise-id")int enterpriseId, int page){
+		List<EnterpriseReviewResponseDTO> enterpriseReviewByEnterpriseId = service.findEnterpriseReviewByEnterpriseId(enterpriseId, page);
+		
+		return new ResponseEntity<List<EnterpriseReviewResponseDTO>>(enterpriseReviewByEnterpriseId, HttpStatus.OK);
 	}
 	
 }

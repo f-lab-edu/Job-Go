@@ -1,8 +1,10 @@
 package com.flab.jobgo.enterprise.review;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewRequestDTO;
+import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
 import com.flab.jobgo.enterprise.service.EnterpriseReviewService;
 
 
@@ -45,5 +48,14 @@ public class EnterpriseReviewServiceTest {
 													.build();
 		
 		assertDoesNotThrow(() ->service.enterpriseReviewRegist(requestDTO, 1));
+	}
+	
+	@Test
+	@DisplayName("리뷰 조회 테스트")
+	public void findEnterpriseReview() {
+		List<EnterpriseReviewResponseDTO> response = service.findEnterpriseReviewByEnterpriseId(2, 0);
+		
+		assertThat(response.size()).isEqualTo(1);
+		assertThat(response.get(0).getOneLineReview()).isEqualTo("좋은기업");
 	}
 }
