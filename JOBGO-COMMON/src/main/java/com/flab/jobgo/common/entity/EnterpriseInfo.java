@@ -82,7 +82,7 @@ public class EnterpriseInfo {
     private String updateDate;
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ENTERPRISE_USER_ID") // 외래키를 PK가 아닌 user_id로 설정
+    @JoinColumn(name = "ENTERPRISE_USER_ID")
     private EnterpriseUser enterpriseUser;
 
     @Builder
