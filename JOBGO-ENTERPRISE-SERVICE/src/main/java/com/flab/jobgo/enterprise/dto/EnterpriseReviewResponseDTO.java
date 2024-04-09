@@ -30,8 +30,6 @@ public class EnterpriseReviewResponseDTO {
 	
 	private String registrationDTM; // 등록일시 (yyyyMMddHHmmss)
 	
-	private int reviewCount; // 총 리뷰 개수
-
 	@Builder
 	public EnterpriseReviewResponseDTO(int enterpriseReviewId, int totalRating, int potentialRating,
 			int benefitSalraryRating, int workLifeRating, int cultureRating, String oneLineReview, String merit,
