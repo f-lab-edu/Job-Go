@@ -1,6 +1,7 @@
 package com.flab.jobgo.enterprise.entity;
 
 import com.flab.jobgo.common.entity.EnterpriseInfo;
+import com.flab.jobgo.enterprise.dto.EnterpriseReviewAverageRatingDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
 
 import jakarta.persistence.Column;
@@ -93,6 +94,16 @@ public class EnterpriseReview {
 					.merit(merit)
 					.disAdventage(disAdventage)
 					.registrationDTM(registrationDTM)
+					.build();
+	}
+	
+	public EnterpriseReviewAverageRatingDTO transferToEnterpriseReviewAverageRatingDTO() {
+		return EnterpriseReviewAverageRatingDTO.builder()
+					.totalRating(totalRating)
+					.potentialRating(potentialRating)
+					.benefitSalraryRating(benefitSalraryRating)
+					.workLifeRating(workLifeRating)
+					.cultureRating(cultureRating)
 					.build();
 	}
 	

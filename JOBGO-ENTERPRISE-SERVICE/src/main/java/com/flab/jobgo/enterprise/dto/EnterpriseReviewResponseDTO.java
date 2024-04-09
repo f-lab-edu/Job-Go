@@ -1,5 +1,6 @@
 package com.flab.jobgo.enterprise.dto;
 
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,8 @@ public class EnterpriseReviewResponseDTO {
 	private String disAdventage; // 단점
 	
 	private String registrationDTM; // 등록일시 (yyyyMMddHHmmss)
+	
+	private int reviewCount; // 총 리뷰 개수
 
 	@Builder
 	public EnterpriseReviewResponseDTO(int enterpriseReviewId, int totalRating, int potentialRating,
@@ -45,6 +48,4 @@ public class EnterpriseReviewResponseDTO {
 		this.disAdventage = disAdventage;
 		this.registrationDTM = registrationDTM;
 	}
-	
-	
 }

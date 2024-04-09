@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.flab.jobgo.common.entity.EnterpriseInfo;
 import com.flab.jobgo.enterprise.dao.EnterpriseInfoRepository;
 import com.flab.jobgo.enterprise.dao.EnterpriseReviewRepository;
+import com.flab.jobgo.enterprise.dto.EnterpriseReviewAverageRatingDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewRequestDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
 import com.flab.jobgo.enterprise.entity.EnterpriseReview;
@@ -48,6 +49,36 @@ public class EnterpriseReviewService {
 		List<EnterpriseReviewResponseDTO> enterpriseReviewList = sliceToList.stream().map(m -> m.transferToEnterpriseReviewResponseDTO()).collect(Collectors.toList());
 		
 		return enterpriseReviewList;
+	}
+	
+	public EnterpriseReviewAverageRatingDTO findEnterpriseAverageReviewRatingByEnterpriseId(int enterpriseId) {
+		 List<EnterpriseReview> enterpriseReviewByEnterpriseId = repository.findEnterpriseReviewByEnterpriseId(enterpriseId);
+		 
+		 EnterpriseReviewAverageRatingDTO reviewAverageRatingDTO = EnterpriseReviewAverageRatingDTO.builder()
+																 	.totalRating(0)
+																 	.benefitSalraryRating(0)
+																 	.cultureRating(0)
+																 	.potentialRating(0)
+																 	.workLifeRating(0)
+																 	.build();
+		 
+		 if(enterpriseReviewByEnterpriseId != null && enterpriseReviewByEnterpriseId.size() > 0) {
+			 List<EnterpriseReviewAverageRatingDTO> enterpriseReviewList = enterpriseReviewByEnterpriseId
+					 														.stream()
+					 														.map(m -> m.transferToEnterpriseReviewAverageRatingDTO())
+					 														.collect(Collectors.toList());
+			 
+			 // 모든 리뷰의 각 평점의 합계 계산
+			 EnterpriseReviewAverageRatingDTO sumReviewAverageRating = enterpriseReviewList
+					 													.stream()
+					 													.reduce(reviewAverageRatingDTO, (x,y) -> x.sumEnterpriseReviewRating(y));
+			 
+			 // 평점의 합계를 리뷰 갯수로 나누어 평균 평점 계산
+			 reviewAverageRatingDTO = sumReviewAverageRating.calculateAverageEnterpriseReviewRating();
+			 
+		 }
+		 
+		 return reviewAverageRatingDTO;
 	}
 	
 }
