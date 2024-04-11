@@ -1,5 +1,7 @@
 package com.flab.jobgo.enterprise.entity;
 
+import java.math.BigDecimal;
+
 import com.flab.jobgo.common.entity.EnterpriseInfo;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewAverageRatingDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
@@ -99,11 +101,11 @@ public class EnterpriseReview {
 	
 	public EnterpriseReviewAverageRatingDTO transferToEnterpriseReviewAverageRatingDTO() {
 		return EnterpriseReviewAverageRatingDTO.builder()
-					.totalRating(totalRating)
-					.potentialRating(potentialRating)
-					.benefitSalraryRating(benefitSalraryRating)
-					.workLifeRating(workLifeRating)
-					.cultureRating(cultureRating)
+					.totalRating(new BigDecimal(totalRating))
+					.potentialRating(new BigDecimal(potentialRating))
+					.benefitSalraryRating(new BigDecimal(benefitSalraryRating))
+					.workLifeRating(new BigDecimal(workLifeRating))
+					.cultureRating(new BigDecimal(cultureRating))
 					.build();
 	}
 	

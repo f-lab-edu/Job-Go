@@ -1,5 +1,6 @@
 package com.flab.jobgo.enterprise.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,11 +56,12 @@ public class EnterpriseReviewService {
 		 List<EnterpriseReview> enterpriseReviewByEnterpriseId = repository.findEnterpriseReviewByEnterpriseId(enterpriseId);
 		 
 		 EnterpriseReviewAverageRatingDTO reviewAverageRatingDTO = EnterpriseReviewAverageRatingDTO.builder()
-																 	.totalRating(0)
-																 	.benefitSalraryRating(0)
-																 	.cultureRating(0)
-																 	.potentialRating(0)
-																 	.workLifeRating(0)
+																 	.totalRating(BigDecimal.ZERO)
+																 	.benefitSalraryRating(BigDecimal.ZERO)
+																 	.cultureRating(BigDecimal.ZERO)
+																 	.potentialRating(BigDecimal.ZERO)
+																 	.workLifeRating(BigDecimal.ZERO)
+																 	.reviewCount(BigDecimal.ZERO)
 																 	.build();
 		 
 		 if(enterpriseReviewByEnterpriseId != null && enterpriseReviewByEnterpriseId.size() > 0) {
