@@ -93,7 +93,7 @@ public class JwtTokenProvider implements InitializingBean{
 	
 	// Request Header에서 토큰 조회
 	public String resolveToken(HttpServletRequest request) {
-		return request.getHeader("Authorization").substring(0, 7);
+		return request.getHeader("Authorization").replace("Bearer ", "");
 	}
 	
 	// JWT Token 검증
@@ -103,12 +103,11 @@ public class JwtTokenProvider implements InitializingBean{
 			return true;
 		}catch(ExpiredJwtException e) {
 			log.info("JWT Token Expired", e);
-			throw e;
+			return false;
 		}catch(JwtException e) {
 			log.info("JWT Token validation error", e);
+			throw e;
 		}
-		
-		return false;
 	}
 
 }
