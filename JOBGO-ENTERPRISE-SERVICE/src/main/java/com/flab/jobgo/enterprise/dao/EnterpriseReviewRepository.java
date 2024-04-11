@@ -1,5 +1,7 @@
 package com.flab.jobgo.enterprise.dao;
 
+import java.util.List;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +16,7 @@ public interface EnterpriseReviewRepository extends JpaRepository<EnterpriseRevi
 
 	@Query("select m from EnterpriseReview m where m.enterpriseInfo.enterpriseId = :enterpriseId")
 	Slice<EnterpriseReview> findEnterpriseReviewByEnterpriseId(@Param("enterpriseId") int enterpriseId, Pageable pageable);
+	
+	@Query("select m from EnterpriseReview m where m.enterpriseInfo.enterpriseId = :enterpriseId")
+	List<EnterpriseReview> findEnterpriseReviewByEnterpriseId(@Param("enterpriseId") int enterpriseId);
 }

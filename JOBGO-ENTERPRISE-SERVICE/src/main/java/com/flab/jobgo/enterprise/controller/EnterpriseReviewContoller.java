@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flab.jobgo.common.constant.CommonConstant;
 import com.flab.jobgo.common.dto.ResponseDTO;
 import com.flab.jobgo.common.utils.ResponseGenerateUtil;
+import com.flab.jobgo.enterprise.dto.EnterpriseReviewAverageRatingDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewRequestDTO;
 import com.flab.jobgo.enterprise.dto.EnterpriseReviewResponseDTO;
 import com.flab.jobgo.enterprise.service.EnterpriseReviewService;
@@ -49,6 +50,13 @@ public class EnterpriseReviewContoller {
 		List<EnterpriseReviewResponseDTO> enterpriseReviewByEnterpriseId = service.findEnterpriseReviewByEnterpriseId(enterpriseId, page);
 		
 		return new ResponseEntity<List<EnterpriseReviewResponseDTO>>(enterpriseReviewByEnterpriseId, HttpStatus.OK);
+	}
+	
+	@GetMapping("/{enterprise-id}/average-rating")
+	public ResponseEntity<EnterpriseReviewAverageRatingDTO> selectEnterpriseReviewAverageRating(@PathVariable("enterprise-id")int enterpriseId){
+		EnterpriseReviewAverageRatingDTO reviewAverageRatingDTO = service.findEnterpriseAverageReviewRatingByEnterpriseId(enterpriseId);
+		
+		return new ResponseEntity<EnterpriseReviewAverageRatingDTO>(reviewAverageRatingDTO, HttpStatus.OK);
 	}
 	
 }
