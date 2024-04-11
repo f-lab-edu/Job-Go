@@ -16,12 +16,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** 기업정보 | TB_ENTERPRISE_INFO */
 
 @Entity
 @Table(name = "TB_ENTERPRISE_INFO")
 @Getter
+@Setter // 변경감지 update를 위해 setter사용
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EnterpriseInfo {
 
@@ -29,7 +31,7 @@ public class EnterpriseInfo {
     @Id
     @Column(name = "ENTERPRISE_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer enterpriseId;
+    private Long enterpriseId;
 
     // 기업명
     @Column(name = "ENTERPRISE_NAME" ,nullable = false ,length = 64)
@@ -80,11 +82,11 @@ public class EnterpriseInfo {
     private String updateDate;
     
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", unique = true) // 외래키를 PK가 아닌 user_id로 설정
+    @JoinColumn(name = "ENTERPRISE_USER_ID")
     private EnterpriseUser enterpriseUser;
 
     @Builder
-	public EnterpriseInfo(Integer enterpriseId, String enterpriseName, String companyNumber, String fsIndustryCode,
+	public EnterpriseInfo(Long enterpriseId, String enterpriseName, String companyNumber, String fsIndustryCode,
 			String scIndustryCode, String managerName, String contact, String address, String establishDate,
 			String enterpriseTypeCode, Integer employees, Integer averageSalary, String updateDate, EnterpriseUser enterpriseUser) {
 		super();
@@ -106,6 +108,7 @@ public class EnterpriseInfo {
     
     public EnterpriseInfoResponseDTO transferToEnterpriseInfoResponseDTO() {
     	return EnterpriseInfoResponseDTO.builder()
+    			.enterpriseId(enterpriseId)
 		    	.enterpriseName(enterpriseName)
 		    	.companyNumber(companyNumber)
 		    	.managerName(managerName)

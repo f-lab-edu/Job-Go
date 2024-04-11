@@ -3,6 +3,14 @@ package com.flab.jobgo.common.constant;
 public class CommonConstant {
 
 	public static final String USER_REGIST_SUCCESS = "회원가입이 완료됐습니다.";
+	public static final String INFO_UPDATE_SUCCESS = "정보 수정이 완료됐습니다.";
+	public static final String REVIEW_REGIST_SUCCESS = "리뷰 등록이 완료됐습니다.";
+	public static final String NOTICE_REGIST_SUCCESS = "공고 등록이 완료됐습니다.";
+	public static final String NOTICE_UPDATE_SUCCESS = "공고 수정이 완료됐습니다.";
+	public static final String RESUME_REGIST_SUCCESS = "이력서 등록이 완료됐습니다.";
+	public static final String RESUME_UPDATE_SUCCESS = "이력서 수정이 완료됐습니다.";
+	public static final String APPLY_REGIST_SUCCESS = "공고 지원이 완료됐습니다.";
+	
 	
 	// 기업 정보 조회시 1차 산업분류 코드 -> 코드값으로 변환하여 반환하기 위한 Enum
 	public enum FirstIndustryEnum{
@@ -28,7 +36,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(FirstIndustryEnum industry : FirstIndustryEnum.values()) {
-				if(industry.code == code) {
+				if(industry.code.equals(code)) {
 					return industry.value;
 				}
 			}
@@ -93,7 +101,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(SecondIndustryEnum industry : SecondIndustryEnum.values()) {
-				if(industry.code == code) {
+				if(industry.code.equals(code)) {
 					return industry.value;
 				}
 			}
@@ -120,7 +128,7 @@ public class CommonConstant {
 		
 		public static String getValue(String code) {
 			for(EnterpriseTypeEnum type : EnterpriseTypeEnum.values()) {
-				if(type.code == code) {
+				if(type.code.equals(code)) {
 					return type.value;
 				}
 			}
