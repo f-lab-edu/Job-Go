@@ -37,7 +37,8 @@ public class JwtTokenProvider implements InitializingBean{
 	private final Logger log = LoggerFactory.getLogger(getClass());
 	private static final String AUTHORITIES_KEY = "auth";
 	private final String secretKey;
-	private final long tokenValidityInMilliseconds;
+	private final long accessTokenValidityInMilliseconds;
+	private final long refreshTokenValidityInMilliseconds;
 	
 	private Key decodedKey;
 	
@@ -47,7 +48,8 @@ public class JwtTokenProvider implements InitializingBean{
 			@Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
 		log.info("{}, 초기화 시작", this.getClass().getName());
 		this.secretKey = secretKey;
-		this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+		this.accessTokenValidityInMilliseconds = tokenValidityInSeconds * 1000; // 1시간 
+		this.refreshTokenValidityInMilliseconds = tokenValidityInSeconds * 1000 * 24 * 7; // 1주일
 		log.info("{}, 초기화 완료", this.getClass().getName());
 	}
 
@@ -59,20 +61,33 @@ public class JwtTokenProvider implements InitializingBean{
 		this.decodedKey = Keys.hmacShaKeyFor(byteSecretKey);
 	}
 	
-	// 로그인 요청시 일치하는 사용자 정보가 존재한다면 권한 정보를 담아 AccessToken 생성
+	// 로그인 성공시 권한 정보를 담아 AccessToken 생성
 	public String createAccessToken(Authentication authentication) {
 	    String authorities = authentication.getAuthorities().stream()
 	            .map(GrantedAuthority::getAuthority)
 	            .collect(Collectors.joining(","));
 
 	    long now = (new Date()).getTime();
-	    Date validity = new Date(now + this.tokenValidityInMilliseconds);
+	    Date validity = new Date(now + this.accessTokenValidityInMilliseconds);
 
 	    return Jwts.builder()
 	            .setSubject(authentication.getName()) // 토큰 식별자
 	            .claim(AUTHORITIES_KEY, authorities) // 토큰 권한
 	            .signWith(decodedKey, SignatureAlgorithm.HS512) // secret을 64byte로 생성하여 HS512 사용
-	            .setExpiration(validity) // 토큰 만료시간
+	            .setExpiration(validity) // 토큰 만료시간(1시간)
+	            .setIssuedAt(new Date()) // 토큰 발생시간
+	            .compact();
+	}
+	
+	// 로그인  성공시 AccessToken이 만료되었을 경우 재발급을 위한 RefreshToken 생성
+	public String createRefreshToken(Authentication authentication) {
+		long now = (new Date()).getTime();
+	    Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
+
+	    return Jwts.builder()
+	            .setSubject(authentication.getName()) // 토큰 식별자
+	            .signWith(decodedKey, SignatureAlgorithm.HS512) // secret을 64byte로 생성하여 HS512 사용
+	            .setExpiration(validity) // 토큰 만료시간(1시간)
 	            .setIssuedAt(new Date()) // 토큰 발생시간
 	            .compact();
 	}
