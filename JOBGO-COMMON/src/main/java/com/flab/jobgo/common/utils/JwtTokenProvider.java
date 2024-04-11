@@ -6,8 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.crypto.SecretKey;
-
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,16 +15,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 
-import com.flab.jobgo.common.constant.CommonConstant;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -108,7 +104,11 @@ public class JwtTokenProvider implements InitializingBean{
 	
 	// Request Header에서 토큰 조회
 	public String resolveToken(HttpServletRequest request) {
-		return request.getHeader("Authorization").replace("Bearer ", "");
+		String bearerToken = request.getHeader("Authorization");
+		if(StringUtils.isNotEmpty(bearerToken) && StringUtils.startsWith(bearerToken, "Bearer ")) {			
+			return bearerToken.replace("Bearer ", "");
+		}
+		return null;
 	}
 	
 	// JWT Token 검증
