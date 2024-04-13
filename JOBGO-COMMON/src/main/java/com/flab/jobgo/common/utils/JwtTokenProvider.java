@@ -78,7 +78,7 @@ public class JwtTokenProvider implements InitializingBean{
 	    // AccessToken이 만료되었을 경우 재발급을 위한 RefreshToken 생성
 	    String refreshToken = Jwts.builder()
 		        .signWith(decodedKey, SignatureAlgorithm.HS512) // secret을 64byte로 생성하여 HS512 사용
-		        .setExpiration(new Date(now + this.refreshTokenValidityInMilliseconds)) // 토큰 만료시간(1시간)
+		        .setExpiration(new Date(now + this.refreshTokenValidityInMilliseconds)) // 토큰 만료시간(1주일)
 		        .setIssuedAt(new Date()) // 토큰 발행시간
 		        .compact();
 	    
