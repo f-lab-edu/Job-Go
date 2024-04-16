@@ -43,10 +43,12 @@ public class GeneralUserService {
 		return userRepository.existsByUserId(userId);
 	}
 	
-	public JwtToken enterpriseUserLogin(UserLoginRequestDTO dto) {
+	public JwtToken generalUserLogin(UserLoginRequestDTO dto) {
 		String userId = dto.getUserId();
-		
+		System.out.println(dto.toString());
 		GeneralUser user = userRepository.findByUserId(userId);
+		
+		System.out.println(user.toString());
 		
 		if(user == null) {
 			throw new UsernameNotFoundException(CommonConstant.USER_NOT_FOUND);

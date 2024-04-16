@@ -17,6 +17,8 @@ import com.flab.jobgo.user.dto.GeneralUserReqDTO;
 import com.flab.jobgo.user.dto.UserLoginRequestDTO;
 import com.flab.jobgo.user.service.GeneralUserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -40,8 +42,16 @@ public class GeneralUserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<JwtToken> enterpriseUserLogin(@RequestBody UserLoginRequestDTO userLoginDto){
-		JwtToken jwtToken = userService.enterpriseUserLogin(userLoginDto);
-		return new ResponseEntity<JwtToken>(jwtToken, HttpStatus.OK);	
+	public ResponseEntity<ResponseDTO> enterpriseUserLogin(@RequestBody UserLoginRequestDTO userLoginDto, HttpServletResponse response){
+		JwtToken jwtToken = userService.generalUserLogin(userLoginDto);
+	
+		// refreshToken은 cookie에 저장
+		Cookie cookie = new Cookie("refreshToken", jwtToken.getRefreshToken());
+		response.addCookie(cookie);
+		
+		// accessToken은 header에 저장
+		return ResponseEntity.ok()
+				.header("accessToken", jwtToken.getAccessToken())
+				.body(new ResponseDTO("success", HttpStatus.OK.value()));	
 	}
 }
