@@ -13,7 +13,7 @@ import com.flab.jobgo.common.entity.EnterpriseUser;
 public interface EnterPriseUserRepository extends JpaRepository<EnterpriseUser, String>{
 
 	//기업회원 로그인시 검증
-	EnterpriseUser findByUserIdAndPw(String userId, String pw);
+	EnterpriseUser findByUserId(String userId);
 	
 	boolean existsByUserId(String userId);
 }

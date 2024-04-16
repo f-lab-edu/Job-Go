@@ -50,9 +50,10 @@ public class UserRepositoryTest {
 		enterpriseUserRepo.save(enterpriseUser);
 		
 		// 일반회원 로그인 -> 실패처리
-		GeneralUser findGeneralUser = generalUserRepo.findByUserIdAndPw("userA", "1234");
-		// 기업회원 로그인 -> 성공처리
-		EnterpriseUser findEnterpriseUser = enterpriseUserRepo.findByUserIdAndPw("userB", "1234");
+		GeneralUser findGeneralUser = generalUserRepo.findByUserId("userA");
+		
+//		 기업회원 로그인 -> 성공처리
+		EnterpriseUser findEnterpriseUser = enterpriseUserRepo.findByUserId("userB");
 		
 		
 		assertThat(findGeneralUser).isNull();
