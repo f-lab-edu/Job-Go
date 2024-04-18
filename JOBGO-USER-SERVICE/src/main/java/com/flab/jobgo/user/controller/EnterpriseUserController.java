@@ -1,5 +1,7 @@
 package com.flab.jobgo.user.controller;
 
+import java.time.Duration;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -12,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flab.jobgo.common.constant.CommonConstant;
 import com.flab.jobgo.common.dto.JwtToken;
 import com.flab.jobgo.common.dto.ResponseDTO;
+import com.flab.jobgo.common.service.RedisService;
 import com.flab.jobgo.common.utils.ResponseGenerateUtil;
 import com.flab.jobgo.user.dto.EnterpriseUserReqDTO;
 import com.flab.jobgo.user.dto.UserLoginRequestDTO;
 import com.flab.jobgo.user.service.EnterpriseUserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class EnterpriseUserController {
 
 	private final EnterpriseUserService userService;
+	private final RedisService redisService;
 	
 	@PostMapping
 	public ResponseEntity<ResponseDTO> enterpriseUserRegist(@RequestBody @Valid EnterpriseUserReqDTO userReqDTO, Errors errors){
@@ -40,8 +46,22 @@ public class EnterpriseUserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<JwtToken> enterpriseUserLogin(@RequestBody UserLoginRequestDTO userLoginDto){
+	public ResponseEntity<ResponseDTO> enterpriseUserLogin(@RequestBody UserLoginRequestDTO userLoginDto, HttpServletResponse response){
 		JwtToken jwtToken = userService.enterpriseUserLogin(userLoginDto);
-		return new ResponseEntity<JwtToken>(jwtToken, HttpStatus.OK);	
+		
+		String accessToken = jwtToken.getAccessToken();
+		String refreshToken = jwtToken.getRefreshToken();
+		
+		// refreshToken은 cookie에 저장
+		Cookie cookie = new Cookie("refreshToken", refreshToken);
+		response.addCookie(cookie);
+		
+		// redis저장소에 accessToken과 refreshToken을 7일 기한으로 저장
+		redisService.setValue(accessToken, refreshToken, Duration.ofDays(7));
+		
+		// accessToken은 header에 저장
+		return ResponseEntity.ok()
+				.header("accessToken", accessToken)
+				.body(new ResponseDTO("success", HttpStatus.OK.value()));	
 	}
 }
