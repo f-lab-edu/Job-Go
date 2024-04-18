@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -77,6 +78,8 @@ public class JwtTokenProvider implements InitializingBean{
 	    
 	    // AccessToken이 만료되었을 경우 재발급을 위한 RefreshToken 생성
 	    String refreshToken = Jwts.builder()
+	    		.setSubject(authentication.getName()) // 토큰 식별자
+	            .claim(AUTHORITIES_KEY, authorities) // 토큰 권한
 		        .signWith(decodedKey, SignatureAlgorithm.HS512) // secret을 64byte로 생성하여 HS512 사용
 		        .setExpiration(new Date(now + this.refreshTokenValidityInMilliseconds)) // 토큰 만료시간(1주일)
 		        .setIssuedAt(new Date()) // 토큰 발행시간
@@ -104,8 +107,8 @@ public class JwtTokenProvider implements InitializingBean{
 	}
 	
 	// Request Header에서 토큰 조회
-	public String resolveToken(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
+	public String resolveToken(ServerHttpRequest request) {
+		String bearerToken = request.getHeaders().get("Authorization").get(0);
 		if(StringUtils.isNotEmpty(bearerToken) && StringUtils.startsWith(bearerToken, "Bearer ")) {			
 			return bearerToken.replace("Bearer ", "");
 		}

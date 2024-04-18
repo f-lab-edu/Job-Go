@@ -1,0 +1,38 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: JOBGO-API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        - id: enterprise-user-login
+          uri: lb://jobgo-user-service
+          predicates: 
+            - Path=/api/user/enterprise/login
+          
+        - id: general-user-login
+          uri: lb://jobgo-user-service
+          predicates:
+            - Path=/api/user/general/login
+            
+        - id: user-service
+          uri: lb://jobgo-user-service
+          predicates:          - Path=/api/user/**
+          filters:
+            - JwtAuthorization
+            
+        - id: enterprise-service
+          uri: lb://jobgo-enterprise-service
+          predicates:
+          - Path=/api/enterprise/**
+          filters:
+            - name: JwtAuthorization
+              args:
+                message: JwtAuthorizationGatewayFilter 설정 
+eureka:  client:    register-with-eureka: true
+    fetch-registry: true
+    service-url: 
+      defaultZone: http://localhost:8761/eureka/
+      
