@@ -1,11 +1,13 @@
 package com.flab.jobgo.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.flab.jobgo.common.entity.JwtToken;
 
@@ -13,7 +15,7 @@ import com.flab.jobgo.common.entity.JwtToken;
 public class JwtServiceTest {
 
 	@Autowired
-	private JwtTokenService service;
+	private JwtTokenStorageService service;
 	
 	private static String accessToken = "accessToken1";
 	private static String newAccessToken = "accessToken2";
@@ -46,5 +48,22 @@ public class JwtServiceTest {
 		
 		assertThat(newJwtToken).isNotNull();
 		assertThat(newJwtToken.getRefreshToken()).isEqualTo(refreshToken);
+	}
+	
+	@Test
+	@DisplayName("RefreshToken 만료시 JwtToken delete")
+	public void deleteJwtToken() {
+		service.removeJwtToken(accessToken);
+		
+		JwtToken selectJwtToken = service.selectJwtToken(accessToken);
+		assertThat(selectJwtToken).isNull();
+	}
+	
+	@Test
+	@DisplayName("JwtToken 저장 예외 테스트")
+	public void jwtTokenSaveExceptionTest() {
+		assertThrows(InvalidDataAccessApiUsageException.class , () -> {
+			service.saveJwtToken(null);
+		});
 	}
 }

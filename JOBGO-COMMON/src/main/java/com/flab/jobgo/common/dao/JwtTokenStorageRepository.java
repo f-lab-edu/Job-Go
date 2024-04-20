@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.flab.jobgo.common.entity.JwtToken;
 
 @Repository
-public interface JwtTokenRepository extends CrudRepository<JwtToken, String>{
+public interface JwtTokenStorageRepository extends CrudRepository<JwtToken, String>{
 
 	Optional<JwtToken> findByAccessToken(String AccessToken);
 }
