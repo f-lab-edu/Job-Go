@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import com.flab.jobgo.common.dto.JwtToken;
+import com.flab.jobgo.common.service.RedisService;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -40,14 +41,18 @@ public class JwtTokenProvider implements InitializingBean{
 	
 	private Key decodedKey;
 	
+	private final RedisService redisService;
+	
 	
 	public JwtTokenProvider(
 			@Value("${jwt.secret}") String secretKey,
-			@Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+			@Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+			RedisService redisService) {
 		log.info("{}, 초기화 시작", this.getClass().getName());
 		this.secretKey = secretKey;
 		this.accessTokenValidityInMilliseconds = tokenValidityInSeconds * 1000; // 1시간 
 		this.refreshTokenValidityInMilliseconds = tokenValidityInSeconds * 1000 * 24 * 7; // 1주일
+		this.redisService = redisService;
 		log.info("{}, 초기화 완료", this.getClass().getName());
 	}
 
@@ -127,6 +132,10 @@ public class JwtTokenProvider implements InitializingBean{
 			log.info("JWT Token validation error", e);
 			throw e;
 		}
+	}
+	
+	public boolean existRefreshToken(String accessToken) {
+		return redisService.getValue(accessToken) != null;
 	}
 
 }
