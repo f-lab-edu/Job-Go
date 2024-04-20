@@ -12,6 +12,8 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 import com.flab.jobgo.common.utils.JwtTokenProvider;
+import com.flab.jobgo.gateway.constant.GatewayConstant;
+import com.flab.jobgo.gateway.exception.NonLoginException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -38,30 +40,31 @@ public class JwtAuthorizationGatewayFilterFactory extends AbstractGatewayFilterF
 		return (exchange, chain) -> {
 			ServerHttpRequest request = exchange.getRequest();
 			log.info("JwtAuthorizationGatewayFilter Start : URI -> {}", request.getURI());
-			
 			String accessToken = tokenProvider.resolveToken(request);
+			
 			if(accessToken == null) {
-				// 토큰이 존재하지 않으므로 401에러
-			}else {
-				tokenProvider.validateToken(accessToken);
+				throw new NonLoginException(GatewayConstant.NON_LOGIN);
+			}
+			
+			try {
+				boolean validate = tokenProvider.validateToken(accessToken);
 				if(validate) {
+					// 토큰 유효
 					return chain.filter(exchange);
 				}else {
-					// accessToken 토큰 만료로 refreshToken가 유효하면 다시 accessToken을 발급한다.
-					List<HttpCookie> cookies = request.getCookies().get("refreshToken");
-					if(cookies != null && cookies.size() > 0) {
-						String refreshToken = cookies.get(0).getValue();
-						if(tokenProvider.validateToken(refreshToken)) {
-							
-						}else {
-							
-						}
+					// 토큰 만료
+					boolean existRefreshToken = tokenProvider.existRefreshToken(accessToken);
+					
+					if(existRefreshToken) {
+						// redis에 refreshToken 저장시 refreshToken만료기간과 동일하게 Duration을 설정했기 때문에
+						// refreshToken이 존재한다면 refreshToken이 유효함
 						
-					}else {
-						// refreshToken이 존재하지 않으면 토큰 만료처리
 					}
 				}
+			} catch (Exception e) {
+				// 토큰 검증 예외
 			}
+			
 		};
 	}
 
