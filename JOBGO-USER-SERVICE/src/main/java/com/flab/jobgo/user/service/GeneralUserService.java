@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.flab.jobgo.common.constant.CommonConstant;
 import com.flab.jobgo.common.dao.GeneralUserRepository;
-import com.flab.jobgo.common.dto.JwtToken;
-import com.flab.jobgo.common.entity.EnterpriseUser;
+import com.flab.jobgo.common.entity.JwtToken;
 import com.flab.jobgo.common.entity.GeneralUser;
 import com.flab.jobgo.common.utils.JwtTokenProvider;
 import com.flab.jobgo.user.dto.GeneralUserReqDTO;

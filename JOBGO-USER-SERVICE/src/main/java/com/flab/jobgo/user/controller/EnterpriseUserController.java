@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.jobgo.common.constant.CommonConstant;
-import com.flab.jobgo.common.dto.JwtToken;
+import com.flab.jobgo.common.entity.JwtToken;
 import com.flab.jobgo.common.dto.ResponseDTO;
-import com.flab.jobgo.common.service.RedisService;
+import com.flab.jobgo.common.service.JwtTokenStorageService;
 import com.flab.jobgo.common.utils.ResponseGenerateUtil;
 import com.flab.jobgo.user.dto.EnterpriseUserReqDTO;
 import com.flab.jobgo.user.dto.UserLoginRequestDTO;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class EnterpriseUserController {
 
 	private final EnterpriseUserService userService;
-	private final RedisService redisService;
+	private final JwtTokenStorageService jwtTokenStorageService;
 	
 	@PostMapping
 	public ResponseEntity<ResponseDTO> enterpriseUserRegist(@RequestBody @Valid EnterpriseUserReqDTO userReqDTO, Errors errors){
@@ -56,8 +56,8 @@ public class EnterpriseUserController {
 		Cookie cookie = new Cookie("refreshToken", refreshToken);
 		response.addCookie(cookie);
 		
-		// redis저장소에 accessToken과 refreshToken을 7일 기한으로 저장
-		redisService.setValue(accessToken, refreshToken, Duration.ofDays(7));
+		// redis저장소에 jwtToken저장
+		jwtTokenStorageService.saveJwtToken(jwtToken);
 		
 		// accessToken은 header에 저장
 		return ResponseEntity.ok()
