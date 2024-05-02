@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: JOBGO-API-GATEWAY
+  profiles:
+    include: secret
   cloud:
     gateway:
       routes:
@@ -21,7 +23,8 @@ spring:
           uri: lb://jobgo-user-service
           predicates:          - Path=/api/user/**
           filters:
-            - JwtAuthorization
+            - name: JwtAuthorization
+ 
             
         - id: enterprise-service
           uri: lb://jobgo-enterprise-service
@@ -29,10 +32,12 @@ spring:
           - Path=/api/enterprise/**
           filters:
             - name: JwtAuthorization
-              args:
-                message: JwtAuthorizationGatewayFilter 설정 
+
 eureka:  client:    register-with-eureka: true
     fetch-registry: true
     service-url: 
       defaultZone: http://localhost:8761/eureka/
+      
+management:
+  endpoints:    web:      exposure:        include:        - "gateway"
       
