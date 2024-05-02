@@ -112,9 +112,12 @@ public class JwtTokenProvider implements InitializingBean{
 	
 	// Request Header에서 토큰 조회
 	public String resolveToken(ServerHttpRequest request) {
-		String bearerToken = request.getHeaders().get("Authorization").get(0);
-		if(StringUtils.isNotEmpty(bearerToken) && StringUtils.startsWith(bearerToken, "Bearer ")) {			
-			return bearerToken.replace("Bearer ", "");
+		List<String> AuthorizationHeader = request.getHeaders().get("Authorization");
+		if(AuthorizationHeader != null && AuthorizationHeader.size() > 0) {
+			String bearerToken = AuthorizationHeader.get(0);
+			if(StringUtils.isNotBlank(bearerToken) && StringUtils.startsWith(bearerToken, "Bearer ")) {			
+				return bearerToken.replace("Bearer ", "");
+			}
 		}
 		return null;
 	}
