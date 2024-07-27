@@ -1,5 +1,7 @@
 ## DataSource
 spring:
+  application:
+    name: jobgo-user-service
   profiles:
     include: secret
   datasource:
@@ -15,4 +17,4 @@ spring:
       hibernate:
         format_sql: true
   
-    
+ 
